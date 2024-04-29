@@ -10,6 +10,8 @@ const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+
 const PORT = process.env.PORT || 3500
 
 console.log(process.env.NODE_ENV)
@@ -19,12 +21,15 @@ connectDB()
 app.use(logger)
 
 app.use(cors(corsOptions))
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 
 app.use(cookieParser())
 
 app.use('/', express.static(path.join(__dirname, 'public')))
+// ----------- Public Images -----------//
+app.use(express.static('public/assets'));
 
 app.use('/', require('./routes/root'))
 app.use('/auth', require('./routes/authRoutes'))
